@@ -11,19 +11,14 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--扫描service包下所有使用注解的类型-->
-    <context:component-scan base-package="com.gushuai.ssm.service" />
-
-    <!--  扫描anno包下的所有使用注解的类，方法，属性
-    <context:component-scan base-package="com.gushuai.webstudy"/>
--->
-
+    <context:component-scan base-package="com.sx.picScale.service" />
     <!-- 配置事务管理器 -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!-- 注入数据库连接池
                 数据源在spring_dao层
         -->
-        <property name="dataSource" ref="dataSource" />
+        <!--<property name="dataSource" ref="dataSource" />-->
     </bean>
 
     <!-- 配置基于注解的声明式事务 -->
