@@ -26,9 +26,6 @@
     <log4j.version>1.2.17</log4j.version>
 
   </properties>
-
-
-
   <dependencies>
 
 
@@ -43,6 +40,12 @@
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>7.0</version>
+    </dependency>
+    <!-- 添加fastjson -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.1.41</version>
     </dependency>
 
     <!-- spring核心依赖 -->
@@ -203,5 +206,30 @@
   </dependencies>
   <build>
     <finalName>PictureScalling</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.mybatis.generator</groupId>
+        <artifactId>mybatis-generator-maven-plugin</artifactId>
+        <version>1.3.5</version>
+        <configuration>
+          <verbose>true</verbose>
+          <overwrite>true</overwrite>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <webResources>
+            <resource>
+              <!-- this is relative to the pom.xml directory -->
+              <directory>WebContent</directory>
+            </resource>
+          </webResources>
+          <webXml>WebContent\WEB-INF\web.xml</webXml>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

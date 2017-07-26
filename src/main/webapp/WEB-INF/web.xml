@@ -1,7 +1,71 @@
 <!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1" metadata-complete="true">
+
+
+  <!-- 如果是用mvn命令生成的xml，需要修改servlet版本为3.1 -->
+  <!-- 配置DispatcherServlet  springmvc前端控制器  -->
+  <servlet>
+    <servlet-name>train-dispatcher</servlet-name>
+    <!-- 注册DispatcherServlet  -->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 配置springMVC需要加载的配置文件
+         处理器  适配器  等等
+        spring-dao.xml,spring-service.xml,spring-web.xml
+        Mybatis - > spring -> springmvc
+     -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring_*.xml</param-value>
+    </init-param>
+  </servlet>
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>train-dispatcher</servlet-name>
+    <!-- 默认匹配所有的请求
+         所有访问的地址都由DispatcherServlet解析。
+     -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- 加载spring容器  搭建DispatchServlet 和 ContextLoaderListener -->
+  <!-- 上下文初始化参数 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring_*.xml</param-value>
+  </context-param>
+
+  <!-- servletContext监听者类 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+
+  <!-- post乱码过虑器 -->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <welcome-file-list>
+    <welcome-file>/jsp/index.jsp</welcome-file>
+  </welcome-file-list>
+
 </web-app>
+
