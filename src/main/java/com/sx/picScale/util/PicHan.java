@@ -32,14 +32,14 @@ public class PicHan {
             int height = img.getHeight();
             if (!isForce) {
                 if (width / height > w / h) {
-                    height = height * w / width;
+                    h = height * w / width;
                 } else {
-                    width = width * h / height;
+                    w = width * h / height;
                 }
             }
-            now = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            now = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             Graphics g = now.getGraphics();
-            g.drawImage(img, 0, 0, width, height, null);
+            g.drawImage(img, 0, 0, w, h, null);
             g.dispose();
         } else {
             logger.error("想要处理的源文件不存在");
@@ -47,10 +47,12 @@ public class PicHan {
         return  now;
     }
 
-    public String genFileName(String ori, int w, int h) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String now = format.format(new Date());
-        String file = now + "_" + UUID.randomUUID() + "_" + w + "*" + h;
+    public String genFileName(long id, int w, int h,boolean isforce) {
+        String file="";
+        if (!isforce)
+            file=id+"_"+"0"+"_" + w + "*" + h;
+        else
+            file=id+"_"+"1"+"_" + w + "*" + h;
         return file;
     }
 }

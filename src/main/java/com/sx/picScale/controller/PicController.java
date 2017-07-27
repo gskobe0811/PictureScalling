@@ -1,12 +1,12 @@
 package com.sx.picScale.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.sx.picScale.entity.Picpath;
 import com.sx.picScale.service.api.PicService;
 import com.sx.picScale.util.PicHan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,14 +32,10 @@ public class PicController {
     @Autowired
     PicService picService;
 
-
-
     @RequestMapping(value = "upload", method = {RequestMethod.POST, RequestMethod.GET})
-    public void Upload(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
-                              @RequestParam(value = "file", required = false) MultipartFile items_pic) throws IOException {
-        JSONObject ret = new JSONObject();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    public ModelAndView upload(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(value = "file", required = false) MultipartFile items_pic) throws IOException {
+        ModelAndView mv = new ModelAndView("index");
         String pathRoot = request.getSession().getServletContext().getRealPath("/");
         String path = "";
         //插入图片
@@ -53,7 +49,6 @@ public class PicController {
                 String imageName = contentType.substring(contentType.indexOf("/") + 1);
                 path = "pic/" + uuid + "." + imageName;
                 File newFile = new File(pathRoot + path);
-                //System.out.println(contentType+"   "+pathRoot);
                 try {
                     items_pic.transferTo(newFile);
                 } catch (IOException e) {
@@ -62,39 +57,36 @@ public class PicController {
                 picpath.setSrc(path);
                 try {
                     picService.addPic(picpath);
-//                    PicHan picHan = new PicHan();
-//                    BufferedImage b1 = picHan.scalling(pathRoot+picpath.getSrc(), 1080, 480, true);
-//                    ServletOutputStream os=response.getOutputStream();
-//                    ImageIO.write(b1,imageName,os);
-                    ret.put("status", "y");
-                  // ret.put("id",picpath.getId());
+                    mv.addObject("id", picService.getPic(path).getId());
+                    mv.addObject("status", 2);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                ret.put("status", "n");
+                mv.addObject("status", 0);
             }
         } else {
-            ret.put("status", "empty");
+            mv.addObject("status", 1);
         }
-        response.getWriter().write(ret.toString());
-
+        return mv;
     }
+
     @RequestMapping(value = "scalle", method = {RequestMethod.POST, RequestMethod.GET})
-   public String scalle(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("image");
+    public void scalle(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "w") int w, @RequestParam(value = "id") long id, @RequestParam(value = "h") int h) throws IOException {
         PicHan picHan = new PicHan();
-        long id=0L;
-        String idStr=request.getParameter("id");
-        if (idStr!=null&&idStr.equals("")&&idStr!="")
-            id=Long.parseLong(idStr);
-        String fileName=picService.getPic(id).getSrc();
+        String fileName = picService.getIdPic(id).getSrc();
         String pathRoot = request.getSession().getServletContext().getRealPath("/");
-        BufferedImage b1 = picHan.scalling(pathRoot+fileName, 1080, 480, true);
-        ServletOutputStream os=response.getOutputStream();
-        ImageIO.write(b1,fileName.split(".")[fileName.split(".").length-1],os);
-        return "index";
-//
+        String s = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        BufferedImage b = picHan.scalling(pathRoot + fileName, w, h, true);
+        ServletOutputStream os = response.getOutputStream();
+        try {
+            ImageIO.write(b, s, os);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        os.flush();
+        os.close();
+
     }
 
 

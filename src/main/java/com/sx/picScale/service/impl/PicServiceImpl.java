@@ -18,7 +18,11 @@ public class PicServiceImpl implements PicService {
 
     }
 
-    public Picpath getPic(long id) {
+    public Picpath getIdPic(long id) {
         return picDao.selectByPrimaryKey(id);
+    }
+
+    public Picpath getPic(String src) {
+        return picDao.selectBySrc(src);
     }
 }

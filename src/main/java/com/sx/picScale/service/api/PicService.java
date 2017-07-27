@@ -7,5 +7,6 @@ import com.sx.picScale.entity.Picpath;
  */
 public interface PicService {
     void addPic(Picpath picpath);
-    Picpath getPic(long id);
+    Picpath getIdPic(long id);
+    Picpath getPic(String src);
 }

@@ -1,0 +1,15 @@
+body { font:18px/22px Verdana, Geneva, sans-serif; background:#fff; color:#333; }
+body,p,ul,ol,li,dl,dt,dd,input,h1,h2,h3,h4,form,hr { padding:0; margin:0; }
+img { border:0; }
+table { border-collapse:collapse; }
+input { font-size:14px; }
+label { display:inline-block; padding-top:1px; }
+label input { border:0; line-height:20px; padding:0px 10px; overflow:visible; color:#fff; }
+label.ui-green { background:#98c286; border:1px solid #3b6e22; }
+label.ui-green input { background:#68a54c; }
+label.ui-blue { background:#8a9cc2; border:1px solid #29447e; }
+label.ui-blue input { background:#5e77aa; }
+ul { list-style:none; }
+a:link, a:visited { color:#3a52a8; text-decoration:none; }
+a:hover, a:active { color:#3a52a8; text-decoration:underline; }
+.wrap { width:960px; margin:0 auto; }
