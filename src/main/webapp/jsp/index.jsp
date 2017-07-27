@@ -31,7 +31,7 @@
         }else if (obj.status=="n"){
             alert("上传的图片格式仅支持jpg,png,jpeg,webp格式")
         }else {
-            window.location.href="index";
+            window.location.href="scalle?id="+obj.id;
         }
 
     },
@@ -51,7 +51,7 @@
 <input type="submit" id="submit" name="submit" value="生成预定义尺寸的图片" onclick="addPicture()"/>
 
 </form>
-<img src="scalle?id=obj.id"/>
+<img src="index.jsp"/>
 
 
 
