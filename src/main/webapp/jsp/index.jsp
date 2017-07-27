@@ -51,6 +51,8 @@
 <input type="submit" id="submit" name="submit" value="生成预定义尺寸的图片" onclick="addPicture()"/>
 
 </form>
+<img src="scalle?id=obj.id"/>
+
 
 
 </body>

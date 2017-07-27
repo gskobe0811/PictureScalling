@@ -16,8 +16,8 @@ import java.util.UUID;
  * Created by lenovo on 2017/7/25.
  */
 public class PicHan {
-    private Logger logger = Logger.getLogger(PicHan.class);
 
+    private Logger logger = Logger.getLogger(PicHan.class);
     public BufferedImage scalling(String ori, int w, int h, boolean isForce) {
         BufferedImage now=null;
         File file = new File(ori);

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -31,9 +31,12 @@ public class PicController {
     @Autowired
     PicService picService;
 
+
+
     @RequestMapping(value = "upload", method = {RequestMethod.POST, RequestMethod.GET})
-    public void productUpload(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
+    public void Upload(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
                               @RequestParam(value = "file", required = false) MultipartFile items_pic) throws IOException {
+
         JSONObject ret = new JSONObject();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -48,8 +51,9 @@ public class PicController {
                 String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                 String contentType = items_pic.getContentType();
                 String imageName = contentType.substring(contentType.indexOf("/") + 1);
-                path = "/pic/" + uuid + "." + imageName;
+                path = "pic/" + uuid + "." + imageName;
                 File newFile = new File(pathRoot + path);
+                System.out.println(contentType+"   "+pathRoot);
                 try {
                     items_pic.transferTo(newFile);
                 } catch (IOException e) {
@@ -59,9 +63,11 @@ public class PicController {
                 try {
                     picService.addPic(picpath);
                     PicHan picHan = new PicHan();
-                    BufferedImage b1 = picHan.scalling(path, 1080, 480, true);
-
+                    BufferedImage b1 = picHan.scalling(pathRoot+picpath.getSrc(), 1080, 480, true);
+                    ServletOutputStream os=response.getOutputStream();
+                    ImageIO.write(b1,imageName,os);
                     ret.put("status", "y");
+                    ret.put("id",picpath.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -74,6 +80,15 @@ public class PicController {
         response.getWriter().write(ret.toString());
 
     }
+//    @RequestMapping(value = "scalle", method = {RequestMethod.POST, RequestMethod.GET})
+//    public void scalle(HttpServletRequest request,HttpServletResponse response) throws IOException {
+//
+//        PicHan picHan = new PicHan();
+//        BufferedImage b1 = picHan.scalling(pathRoot+picpath.getSrc(), 1080, 480, true);
+//        ServletOutputStream os=response.getOutputStream();
+//        ImageIO.write(b1,imageName,os);
+//
+//    }
 
 
 }

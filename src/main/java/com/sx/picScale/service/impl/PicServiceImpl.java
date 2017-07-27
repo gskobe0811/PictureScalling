@@ -17,4 +17,8 @@ public class PicServiceImpl implements PicService {
         picDao.insert(picpath);
 
     }
+
+    public Picpath getPic(long id) {
+        return picDao.selectByPrimaryKey(id);
+    }
 }
