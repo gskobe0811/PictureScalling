@@ -34,7 +34,7 @@
     </form>
 </div>
 <div id="test">
-    <c:if test="${id!=null}">
+    <c:if test="${pic!=null}">
         <table>
             <tr>
                 <td>
@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <td>
-                    <img src="scalle?id=${id}&w=1080&h=480"/>
+                    <img src="scalle?id=${pic.id}&w=1080&h=480"/>
                 </td>
             </tr>
             <tr>
@@ -53,7 +53,7 @@
             </tr>
             <tr>
                 <td>
-                    <img src="scalle?id=${id}&w=1080&h=450"/>
+                    <img src="scalle?id=${pic.id}&w=1080&h=450"/>
                 </td>
             </tr>
             <tr>
@@ -63,7 +63,7 @@
             </tr>
             <tr>
                 <td>
-                    <img src="scalle?id=${id}&w=1080&h=330"/>
+                    <img src="scalle?id=${pic.id}&w=1080&h=330"/>
                 </td>
             </tr>
             <tr>
@@ -74,7 +74,7 @@
             </tr>
             <tr>
                 <td>
-                    <img src="scalle?id=${id}&w=1080&h=392"/>
+                    <img src="scalle?id=${pic.id}&w=1080&h=392"/>
                 </td>
             </tr>
         </table>

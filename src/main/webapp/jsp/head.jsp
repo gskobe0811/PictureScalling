@@ -20,7 +20,7 @@
 <body>
 <a href="jsp/index.jsp">图片预定义缩放&nbsp&nbsp&nbsp&nbsp</a>
 <a href="">根据配置生成图片&nbsp&nbsp&nbsp&nbsp</a>
-<a href="">图片裁剪&nbsp&nbsp&nbsp&nbsp</a>
+<a href="jsp/cutPic.jsp">图片裁剪&nbsp&nbsp&nbsp&nbsp</a>
 <br/>
 <br/>
 </body>

@@ -6,7 +6,6 @@ import com.sx.picScale.service.api.PicService;
 import com.sx.picScale.util.PicHan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,14 +35,24 @@ public class PicController {
     public ModelAndView upload(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
                                @RequestParam(value = "file", required = false) MultipartFile items_pic) throws IOException {
         ModelAndView mv = new ModelAndView("index");
+        picUpload(picpath,mv,request,items_pic);
+        return mv;
+    }
+    @RequestMapping(value = "uploadCut", method = {RequestMethod.POST, RequestMethod.GET})
+    public ModelAndView uploadCut(Picpath picpath, HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(value = "file", required = false) MultipartFile items_pic) throws IOException {
+        ModelAndView mv = new ModelAndView("cutPic");
+        picUpload(picpath,mv,request,items_pic);
+        return mv;
+
+    }
+    public void picUpload(Picpath picpath,ModelAndView mv,HttpServletRequest request,MultipartFile items_pic){
         String pathRoot = request.getSession().getServletContext().getRealPath("/");
         String path = "";
+        PicHan picHan=new PicHan();
         //插入图片
         if (items_pic.getSize() != 0) {
-            String type = items_pic.getContentType();
-            Pattern pattern = Pattern.compile("\\.(jpg)|(png)|(gif)|(jpeg)|(webp)|(JPG)|(PNG)|(GIF)|(JPEG)|(WEBP)");
-            Matcher matcher = pattern.matcher(type);
-            if (matcher.find()) {
+            if (picHan.isVaildImage(items_pic.getOriginalFilename())) {
                 String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                 String contentType = items_pic.getContentType();
                 String imageName = contentType.substring(contentType.indexOf("/") + 1);
@@ -57,7 +66,7 @@ public class PicController {
                 picpath.setSrc(path);
                 try {
                     picService.addPic(picpath);
-                    mv.addObject("id", picService.getPic(path).getId());
+                    mv.addObject("pic", picService.getPic(path));
                     mv.addObject("status", 2);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -68,7 +77,6 @@ public class PicController {
         } else {
             mv.addObject("status", 1);
         }
-        return mv;
     }
 
     @RequestMapping(value = "scalle", method = {RequestMethod.POST, RequestMethod.GET})
@@ -76,11 +84,11 @@ public class PicController {
         PicHan picHan = new PicHan();
         String fileName = picService.getIdPic(id).getSrc();
         String pathRoot = request.getSession().getServletContext().getRealPath("/");
-        String s = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        String suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
         BufferedImage b = picHan.scalling(pathRoot + fileName, w, h, true);
         ServletOutputStream os = response.getOutputStream();
         try {
-            ImageIO.write(b, s, os);
+            ImageIO.write(b, suffix, os);
         } catch (Exception e) {
             e.printStackTrace();
         }
